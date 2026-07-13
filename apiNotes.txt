@@ -1,0 +1,326 @@
+React API क्या होती है?
+
+React API मतलब React द्वारा दिए गए built-in functions, hooks, methods और utilities, जिनकी मदद से हम React applications बनाते हैं।
+
+जैसे JavaScript में Array.map(), filter() APIs होती हैं, वैसे ही React अपनी APIs देता है।
+===========================================================================================================================
+
+React APIs के Types
+
+React APIs को हम आसानी से इन categories में समझ सकते हैं।
+React APIs
+│
+├── 1. Hooks APIs
+├── 2. Component APIs
+├── 3. Context APIs
+├── 4. Ref APIs
+├── 5. Lazy Loading APIs
+├── 6. Memoization APIs
+├── 7. Transition APIs
+├── 8. Suspense APIs
+├── 9. DOM APIs
+├── 10. Legacy APIs
+======================================================================================================================
+1. Hooks APIs ⭐⭐⭐⭐⭐ (सबसे Important)
+
+React 16.8 के बाद सबसे ज्यादा यही APIs use होती हैं।
+
+useState
+
+State manage करने के लिए।
+
+const [count, setCount] = useState(0);
+
+Use Case
+
+Counter
+Toggle
+Form Input
+Modal Open/Close
+useEffect
+
+Side Effects के लिए।
+
+useEffect(() => {
+    console.log("Component Mounted");
+}, []);
+
+Use Cases
+
+API Call
+Timer
+Event Listener
+LocalStorage
+useContext
+
+Global data access करने के लिए।
+
+const user = useContext(UserContext);
+
+Use Cases
+
+Theme
+Authentication
+Language
+useRef
+
+DOM access या value store करने के लिए।
+
+const inputRef = useRef();
+
+Use Cases
+
+Focus Input
+Previous Value
+Timer ID
+useMemo
+
+Expensive calculation cache करता है।
+
+const total = useMemo(() => {
+   return calculateTotal();
+}, [items]);
+
+Use Cases
+
+Large Filter
+Sorting
+Calculation
+useCallback
+
+Function cache करता है।
+
+const handleClick = useCallback(() => {
+
+}, []);
+
+Use Cases
+
+Child Re-render रोकना
+React.memo के साथ
+useReducer
+
+Complex state manage करता है।
+
+const [state, dispatch] = useReducer(reducer, initialState);
+
+Use Cases
+
+Shopping Cart
+Form
+Authentication
+useLayoutEffect
+
+Screen paint होने से पहले चलता है।
+
+useLayoutEffect(() => {
+
+}, []);
+
+Use Cases
+
+DOM Measurement
+Animation
+useImperativeHandle
+
+Parent को custom methods expose करता है।
+
+useImperativeHandle(ref, () => ({
+   focus(){}
+}));
+useId
+
+Unique ID generate करता है।
+
+const id = useId();
+useTransition
+
+Heavy UI updates को background में करता है।
+
+const [isPending, startTransition] = useTransition();
+useDeferredValue
+
+Value को delay करके update करता है।
+
+const deferred = useDeferredValue(search);
+
+Search optimization में बहुत उपयोगी है।
+
+useSyncExternalStore
+
+Redux जैसी external store subscribe करने के लिए।
+
+useInsertionEffect
+
+CSS libraries के लिए।
+
+Rarely use होता है।
+
+2. Component APIs
+
+ये hooks नहीं हैं।
+
+React.memo()
+
+Component memoize करता है।
+
+export default React.memo(User);
+forwardRef
+
+Ref child component तक भेजता है।
+
+const Input = forwardRef((props, ref) => {
+
+});
+Fragment
+
+Extra div बनने से बचाता है।
+
+<>
+   <h1>Hello</h1>
+</>
+StrictMode
+
+Development में bugs detect करता है।
+
+<StrictMode>
+    <App/>
+</StrictMode>
+Profiler
+
+Performance measure करता है।
+
+3. Context API
+
+Global state share करने के लिए।
+
+const ThemeContext = createContext();
+
+फिर
+
+<ThemeContext.Provider>
+
+</ThemeContext.Provider>
+
+और
+
+useContext(ThemeContext);
+4. Ref APIs
+createRef()
+useRef()
+forwardRef()
+useImperativeHandle()
+
+इनका काम DOM और component references handle करना है।
+
+5. Lazy Loading APIs
+lazy()
+const Home = lazy(() => import("./Home"));
+Suspense
+<Suspense fallback={<Loader/>}>
+    <Home/>
+</Suspense>
+6. Memoization APIs
+
+Performance improve करने के लिए।
+
+React.memo
+useMemo
+useCallback
+7. Transition APIs
+
+React 18 में आए।
+
+useTransition
+startTransition
+
+UI को smooth बनाते हैं।
+
+8. Suspense APIs
+Suspense
+lazy
+
+Data loading और code splitting के लिए।
+
+9. DOM APIs
+
+React 18 में।
+
+createRoot
+import { createRoot } from "react-dom/client";
+
+createRoot(document.getElementById("root")).render(<App />);
+hydrateRoot
+
+Server-side rendering (SSR) के लिए।
+
+createPortal
+
+Component को किसी दूसरे DOM node में render करता है।
+
+createPortal(
+   <Modal />,
+   document.body
+);
+
+Use Cases
+
+Modal
+Tooltip
+Popup
+10. Legacy APIs
+
+आजकल कम उपयोग होती हैं।
+
+Component
+PureComponent
+createClass
+findDOMNode
+ReactDOM.render
+=======================================================================================================================
+
+| API              | सीखना चाहिए? | Interview Frequency |
+| ---------------- | ------------ | ------------------- |
+| useState         | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐               |
+| useEffect        | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐               |
+| useRef           | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                |
+| useContext       | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                |
+| useReducer       | ⭐⭐⭐⭐         | ⭐⭐⭐⭐                |
+| useMemo          | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐               |
+| useCallback      | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐               |
+| React.memo       | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐               |
+| lazy             | ⭐⭐⭐⭐         | ⭐⭐⭐                 |
+| Suspense         | ⭐⭐⭐⭐         | ⭐⭐⭐                 |
+| createPortal     | ⭐⭐⭐⭐         | ⭐⭐⭐                 |
+| forwardRef       | ⭐⭐⭐⭐         | ⭐⭐⭐⭐                |
+| useTransition    | ⭐⭐⭐          | ⭐⭐                  |
+| useDeferredValue | ⭐⭐⭐          | ⭐⭐                  |
+| useId            | ⭐⭐⭐          | ⭐⭐                  |
+| StrictMode       | ⭐⭐⭐          | ⭐⭐⭐                 |
+| Profiler         | ⭐⭐           | ⭐                   |
+======================================================================================================================
+
+Phase 1 (ज़रूरी)
+✅ useState
+✅ useEffect
+✅ useRef
+✅ useContext
+✅ React.memo
+✅ useMemo
+✅ useCallback
+✅ createPortal
+✅ Fragment
+✅ StrictMode
+Phase 2 (Intermediate)
+✅ useReducer
+✅ lazy
+✅ Suspense
+✅ forwardRef
+✅ useImperativeHandle
+Phase 3 (Advanced)
+✅ useTransition
+✅ useDeferredValue
+✅ useId
+✅ useLayoutEffect
+✅ useSyncExternalStore
+======================================================================================================================

@@ -1,0 +1,260 @@
+अगर Fetch API JavaScript का built-in API है, तो Axios एक third-party HTTP client library है।
+
+यानी Axios browser में पहले से नहीं होता, इसे install करना पड़ता है।
+
+npm install axios
+
+या
+
+yarn add axios
+Axios क्या है?
+
+Axios एक library है जिसकी मदद से हम
+
+GET
+POST
+PUT
+PATCH
+DELETE
+
+HTTP requests भेजते हैं।
+
+React, Vue, Angular, Node.js सभी में Axios use कर सकते हैं।
+
+Fetch vs Axios
+Fetch API	Axios
+JavaScript Built-in API	External Library
+Install करने की जरूरत नहीं	npm install axios करना पड़ता है
+response.json() करना पड़ता है	सीधे response.data मिलता है
+Error handling manually करनी पड़ती है	HTTP errors को automatically reject करता है
+Syntax थोड़ा बड़ा	Syntax छोटा और clean
+Axios Import
+import axios from "axios";
+1. GET Request
+Fetch
+const response = await fetch(url);
+const data = await response.json();
+Axios
+const response = await axios.get(url);
+
+console.log(response.data);
+
+ध्यान दो:
+
+response.data
+
+बस इतना ही।
+
+response.json() की जरूरत नहीं।
+
+Example
+import axios from "axios";
+
+async function getUsers() {
+    const response = await axios.get(
+        "https://jsonplaceholder.typicode.com/users"
+    );
+
+    console.log(response.data);
+}
+React Example
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+function App() {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        async function getUsers() {
+            const response = await axios.get(
+                "https://jsonplaceholder.typicode.com/users"
+            );
+
+            setUsers(response.data);
+        }
+
+        getUsers();
+    }, []);
+
+    return (
+        <>
+            {users.map((user) => (
+                <h2 key={user.id}>{user.name}</h2>
+            ))}
+        </>
+    );
+}
+2. POST Request
+await axios.post(
+    "https://jsonplaceholder.typicode.com/posts",
+    {
+        title: "React",
+        body: "Learning Axios",
+    }
+);
+
+यहाँ
+
+दूसरा parameter ही data होता है।
+
+Axios खुद JSON में convert कर देता है।
+
+Fetch की तरह
+
+JSON.stringify()
+
+नहीं करना पड़ता।
+
+3. PUT Request
+await axios.put(url, {
+    name: "Vibha",
+});
+4. PATCH Request
+await axios.patch(url, {
+    name: "Vibha",
+});
+5. DELETE Request
+await axios.delete(url);
+Axios Response
+const response = await axios.get(url);
+
+console.log(response);
+
+Output लगभग ऐसा होगा:
+
+{
+   data: [...],
+   status: 200,
+   statusText: "OK",
+   headers: {},
+   config: {},
+}
+
+सबसे ज्यादा use होता है
+
+response.data
+Error Handling
+try {
+    const response = await axios.get(url);
+
+    console.log(response.data);
+}
+catch(error) {
+    console.log(error);
+}
+
+अगर
+
+404
+500
+
+आता है,
+
+तो Axios सीधे catch में चला जाता है।
+
+यही Axios की सबसे बड़ी सुविधा है।
+
+Headers
+await axios.get(url, {
+    headers: {
+        Authorization: "Bearer token",
+    },
+});
+POST with Headers
+await axios.post(
+    url,
+    {
+        name: "Vibha",
+    },
+    {
+        headers: {
+            Authorization: "Bearer token",
+        },
+    }
+);
+Base URL
+
+बार-बार same URL लिखने की बजाय:
+
+import axios from "axios";
+
+const api = axios.create({
+    baseURL: "https://jsonplaceholder.typicode.com",
+});
+
+फिर
+
+const response = await api.get("/users");
+Axios Interceptors (बहुत Important)
+
+हर request से पहले या response के बाद common logic चलाने के लिए।
+
+उदाहरण:
+
+JWT Token automatically भेजना।
+
+api.interceptors.request.use((config) => {
+    config.headers.Authorization = "Bearer token";
+
+    return config;
+});
+
+Response Interceptor
+
+api.interceptors.response.use((response) => {
+    return response;
+});
+
+Real Project Use Cases:
+
+हर request में JWT token attach करना।
+अगर 401 Unauthorized आए तो user को login page पर redirect करना।
+Common error messages handle करना।
+Fetch vs Axios Example
+Fetch
+const response = await fetch(url);
+
+const data = await response.json();
+Axios
+const response = await axios.get(url);
+
+const data = response.data;
+
+Axios का code छोटा और पढ़ने में आसान होता है।
+
+Interview Questions
+1. Axios क्या है?
+
+एक third-party HTTP client library जो API requests भेजने के लिए उपयोग होती है।
+
+2. Axios और Fetch में क्या अंतर है?
+Fetch built-in है।
+Axios install करना पड़ता है।
+Fetch में response.json() करना पड़ता है।
+Axios में सीधे response.data मिलता है।
+Axios HTTP errors (जैसे 404, 500) को automatically reject करता है।
+3. Axios में data कैसे मिलता है?
+response.data
+4. Axios में POST request कैसे भेजते हैं?
+axios.post(url, data);
+5. Axios Interceptors क्या हैं?
+
+Request भेजने से पहले या response मिलने के बाद common logic चलाने का तरीका।
+
+6. Real project में Axios क्यों ज्यादा use होता है?
+Cleaner syntax
+Automatic JSON handling
+Better error handling
+Request/Response interceptors
+Easy authentication (JWT/Bearer Token)
+Centralized API configuration (axios.create())
+MERN Interview Tip
+
+2–4 साल के React/MERN इंटरव्यू में अक्सर ये पूछा जाता है:
+
+Fetch और Axios में क्या difference है?
+response.json() और response.data में क्या अंतर है?
+Axios Interceptors क्या होते हैं?
+axios.create() क्यों use करते हैं?
+JWT token हर request में automatically कैसे भेजोगे?
+401 Unauthorized आने पर user को login page पर कैसे redirect करोगे?

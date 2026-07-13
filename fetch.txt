@@ -1,0 +1,211 @@
+👉 Fetch API एक JavaScript (Web Browser) API है, जिसे React, Vue, Angular या plain JavaScript—सभी में use किया जा सकता है।
+
+Fetch API क्या है?
+
+Fetch API का उपयोग Server/API से data लाने (GET), भेजने (POST), update (PUT/PATCH), और delete (DELETE) करने के लिए किया जाता है।
+
+उदाहरण:
+
+fetch("https://jsonplaceholder.typicode.com/users")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.log(error));
+Fetch API का Flow
+Client (React App)
+        │
+        ▼
+fetch()
+        │
+        ▼
+Server/API
+        │
+        ▼
+Response
+        │
+        ▼
+response.json()
+        │
+        ▼
+JavaScript Object
+Fetch API Methods
+1. GET (Data लाना)
+
+सबसे ज्यादा use होने वाला method।
+
+fetch("https://jsonplaceholder.typicode.com/posts")
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+2. POST (Data भेजना)
+fetch("https://jsonplaceholder.typicode.com/posts", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    title: "React",
+    body: "Learning Fetch API",
+  }),
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+body में JSON.stringify() क्यों?
+
+Server को string भेजनी होती है, जबकि JavaScript object सीधे नहीं भेजा जा सकता।
+
+const user = {
+  name: "Vibha",
+};
+
+❌ गलत:
+
+body: user;
+
+✅ सही:
+
+body: JSON.stringify(user);
+3. PUT (पूरा Data Update)
+fetch("url", {
+  method: "PUT",
+  body: JSON.stringify(updatedData),
+});
+4. PATCH (कुछ Fields Update)
+fetch("url", {
+  method: "PATCH",
+  body: JSON.stringify({
+    name: "Vibha",
+  }),
+});
+5. DELETE
+fetch("url/5", {
+  method: "DELETE",
+});
+Response को JSON में क्यों बदलते हैं?
+fetch(url)
+  .then((response) => response.json())
+
+fetch() का response एक Response object होता है।
+
+console.log(response);
+
+Output:
+
+Response {
+   status:200,
+   ok:true,
+   headers:{},
+   body:ReadableStream
+}
+
+Data सीधे नहीं मिलता।
+
+इसे JavaScript object में बदलने के लिए:
+
+response.json()
+Async Await के साथ
+
+आजकल यही तरीका ज्यादा use होता है।
+
+async function getUsers() {
+  try {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+React में Fetch API
+
+अक्सर API call useEffect के अंदर की जाती है ताकि component mount होने पर data आ जाए।
+
+import { useEffect, useState } from "react";
+
+function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function getUsers() {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users"
+      );
+
+      const data = await response.json();
+
+      setUsers(data);
+    }
+
+    getUsers();
+  }, []);
+
+  return (
+    <>
+      {users.map((user) => (
+        <h3 key={user.id}>{user.name}</h3>
+      ))}
+    </>
+  );
+}
+Error Handling
+
+सिर्फ catch पर्याप्त नहीं होता, क्योंकि HTTP 404 या 500 आने पर fetch() promise reject नहीं करता।
+
+async function getData() {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+Headers
+
+Headers server को बताते हैं कि request या response का format क्या है।
+
+headers: {
+  "Content-Type": "application/json",
+  Authorization: "Bearer your_token",
+}
+
+Interview Questions
+1. Fetch API क्या है?
+
+Browser द्वारा दिया गया JavaScript API जो HTTP requests भेजने और responses प्राप्त करने के लिए उपयोग होता है।
+
+2. क्या Fetch API React API है?
+
+❌ नहीं। यह JavaScript (Web) API है।
+
+3. Fetch का default method क्या है?
+
+✅ GET
+
+4. response.json() क्यों use करते हैं?
+
+Response body को JavaScript object में बदलने के लिए।
+
+5. JSON.stringify() क्यों use करते हैं?
+
+JavaScript object को JSON string में बदलकर server को भेजने के लिए।
+
+6. PUT और PATCH में क्या अंतर है?
+PUT → पूरा resource replace करता है।
+PATCH → केवल आवश्यक fields update करता है।
+7. response.ok क्या होता है?
+
+यह boolean property है। true तब होती है जब status code 200–299 के बीच हो।
+
+8. React में Fetch API कहाँ use करते हैं?
+
+आमतौर पर useEffect के अंदर data fetch करने के लिए, या user actions (जैसे form submit, button click) पर API call करने के लिए।
+
+नोट: बड़े React projects में fetch() के अलावा Axios और data-fetching libraries जैसे TanStack Query (React Query) का भी काफी उपयोग होता है, लेकिन fetch() की fundamentals अच्छी तरह समझना सबसे ज़रूरी है।
