@@ -1,0 +1,393 @@
+Project Structure
+src/
+│── components/
+│   └── UserList.jsx
+│
+│── services/
+│   ├── api.js
+│   └── userService.js
+│
+│── App.jsx
+│── main.jsx
+
+Step 1: Install Axios
+
+Step 2: Create services/api.js
+
+This file creates a reusable Axios instance.
+
+JS file
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export default api;
+
+Why use axios.create()?
+
+Instead of writing the full URL every time,
+
+axios.get("https://jsonplaceholder.typicode.com/users");
+
+you can simply write
+
+api.get("/users");
+
+Step 3: Create services/userService.js
+All API methods related to users are kept here.
+JS
+
+import api from "./api";
+
+// GET
+export const getUsers = () => {
+  return api.get("/users");
+};
+
+// GET by ID
+export const getUserById = (id) => {
+  return api.get(`/users/${id}`);
+};
+
+// POST
+export const createUser = (user) => {
+  return api.post("/users", user);
+};
+
+// PUT
+export const updateUser = (id, user) => {
+  return api.put(`/users/${id}`, user);
+};
+
+// PATCH
+export const patchUser = (id, user) => {
+  return api.patch(`/users/${id}`, user);
+};
+
+// DELETE
+export const deleteUser = (id) => {
+  return api.delete(`/users/${id}`);
+};
+
+Step 4: Use API in React Component
+
+import { useEffect, useState } from "react";
+import { getUsers } from "../services/userService";
+
+function UserList() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  async function loadUsers() {
+    try {
+      const response = await getUsers();
+      setUsers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return (
+    <div>
+      <h2>Users</h2>
+
+      {users.map((user) => (
+        <p key={user.id}>{user.name}</p>
+      ))}
+    </div>
+  );
+}
+
+export default UserList;
+
+POST Example
+
+import { createUser } from "../services/userService";
+
+const addUser = async () => {
+  try {
+    const response = await createUser({
+      name: "John",
+      email: "john@gmail.com",
+    });
+
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+PUT Example
+
+import { updateUser } from "../services/userService";
+
+const editUser = async () => {
+  try {
+    const response = await updateUser(1, {
+      name: "Updated Name",
+      email: "updated@gmail.com",
+    });
+
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+PATCH Example
+import { patchUser } from "../services/userService";
+
+const updateName = async () => {
+  try {
+    const response = await patchUser(1, {
+      name: "Only Name Updated",
+    });
+
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+DELETE Example
+import { deleteUser } from "../services/userService";
+
+const removeUser = async () => {
+  try {
+    await deleteUser(1);
+    console.log("User Deleted");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+API Flow
+React Component
+       │
+       ▼
+userService.js
+       │
+       ▼
+api.js (Axios Instance)
+       │
+       ▼
+Server
+       │
+       ▼
+Response
+       │
+       ▼
+Component
+
+Why use a services folder?
+Without a service layer:
+
+// UserList.jsx
+axios.get(...)
+
+// Profile.jsx
+axios.get(...)
+
+// Dashboard.jsx
+axios.get(...)
+
+The same API code gets repeated in many components.
+
+With a service layer:
+UserList.jsx
+      │
+Profile.jsx
+      │
+Dashboard.jsx
+      │
+      ▼
+userService.js
+      │
+      ▼
+api.js
+
+This gives you:
+✅ Reusable API functions
+✅ Cleaner React components
+✅ Easier maintenance
+✅ One place to update API URLs or headers
+✅ Better separation of concerns
+
+Best Practice for Real Projects
+
+For medium and large React applications, organize services by feature:
+
+src/
+│── services/
+│   ├── api.js              // Axios instance
+│   ├── authService.js      // Login, Register, Logout
+│   ├── userService.js      // User APIs
+│   ├── productService.js   // Product APIs
+│   ├── orderService.js     // Order APIs
+│   └── profileService.js   // Profile APIs
+
+This is the structure commonly used in professional React/MERN projects because it keeps business logic separate from UI components and makes the codebase scalable.
+
+
+
+
+
+
+
+Yes, exactly! That's how most React projects work.
+
+Once you understand one API call, 90% of the code remains the same. The main things that change are:
+
+✅ API URL (endpoint)
+✅ HTTP Method (GET, POST, PUT, PATCH, DELETE)
+✅ Request data (body)
+✅ Response data structure
+Example 1: Users API
+GET    /users
+POST   /users
+PUT    /users/1
+DELETE /users/1
+export const getUsers = () => api.get("/users");
+
+export const createUser = (user) => api.post("/users", user);
+
+export const updateUser = (id, user) => api.put(`/users/${id}`, user);
+
+export const deleteUser = (id) => api.delete(`/users/${id}`);
+Example 2: Products API
+
+Only the endpoint changes.
+
+export const getProducts = () => api.get("/products");
+
+export const createProduct = (product) =>
+  api.post("/products", product);
+
+export const updateProduct = (id, product) =>
+  api.put(`/products/${id}`, product);
+
+export const deleteProduct = (id) =>
+  api.delete(`/products/${id}`);
+Example 3: Employees API
+
+Again, only the endpoint changes.
+
+export const getEmployees = () =>
+  api.get("/employees");
+
+export const createEmployee = (employee) =>
+  api.post("/employees", employee);
+Only the request body changes
+User
+{
+  name: "John",
+  email: "john@gmail.com"
+}
+Product
+{
+  title: "Laptop",
+  price: 50000
+}
+Employee
+{
+  name: "Vibha",
+  salary: 50000
+}
+
+The structure of the object depends on what the backend API expects.
+
+Component code is almost the same
+
+For Users
+
+const response = await getUsers();
+setUsers(response.data);
+
+For Products
+
+const response = await getProducts();
+setProducts(response.data);
+
+For Employees
+
+const response = await getEmployees();
+setEmployees(response.data);
+
+Only the function name and state variable change.
+
+That's why we create a service layer
+
+Instead of writing this in every component:
+
+axios.get(...);
+axios.post(...);
+axios.put(...);
+axios.delete(...);
+
+we write:
+
+getUsers();
+createUser();
+updateUser();
+deleteUser();
+
+The component doesn't need to know how the API works—it just calls a function.
+
+Real Project Example
+src/
+│
+├── services/
+│   ├── api.js
+│   ├── authService.js
+│   ├── userService.js
+│   ├── productService.js
+│   ├── orderService.js
+│   ├── categoryService.js
+│   └── profileService.js
+
+Each service file contains almost the same CRUD operations:
+
+// GET
+getItems()
+
+// GET by ID
+getItem(id)
+
+// POST
+createItem(data)
+
+// PUT
+updateItem(id, data)
+
+// PATCH
+patchItem(id, data)
+
+// DELETE
+deleteItem(id)
+
+The only differences are:
+
+Endpoint (/users, /products, /orders)
+Data you send
+Data you receive
+Interview Question
+
+Q: Why do we create separate service files for APIs?
+
+Answer:
+
+Keeps components clean.
+Reuses API code across multiple components.
+Makes maintenance easier.
+If the API URL changes, we update it in one place.
+Follows the Separation of Concerns (SoC) principle, where UI logic and API logic are kept separate.
+
+This is the pattern you'll see in most professional React/MERN applications.

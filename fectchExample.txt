@@ -1,0 +1,243 @@
+Project Structure
+src/
+│── components/
+│   └── UserList.jsx
+│
+│── services/
+│   ├── api.js
+│   └── userService.js
+│
+│── App.jsx
+│── main.jsx
+Step 1: Create services/api.js
+
+Store the base URL and create a reusable function for making requests.
+
+const BASE_URL = "https://jsonplaceholder.typicode.com";
+
+export const apiRequest = async (endpoint, options = {}) => {
+  const response = await fetch(`${BASE_URL}${endpoint}`, options);
+
+  if (!response.ok) {
+    throw new Error("Something went wrong");
+  }
+
+  return response.json();
+};
+Why create this file?
+
+Instead of writing:
+
+fetch("https://jsonplaceholder.typicode.com/users");
+
+every time, you simply write:
+
+apiRequest("/users");
+Step 2: Create services/userService.js
+import { apiRequest } from "./api";
+
+// GET
+export const getUsers = () => {
+  return apiRequest("/users");
+};
+
+// GET by ID
+export const getUserById = (id) => {
+  return apiRequest(`/users/${id}`);
+};
+
+// POST
+export const createUser = (user) => {
+  return apiRequest("/users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+};
+
+// PUT
+export const updateUser = (id, user) => {
+  return apiRequest(`/users/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+};
+
+// PATCH
+export const patchUser = (id, user) => {
+  return apiRequest(`/users/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+};
+
+// DELETE
+export const deleteUser = (id) => {
+  return apiRequest(`/users/${id}`, {
+    method: "DELETE",
+  });
+};
+Step 3: GET Example
+import { useEffect, useState } from "react";
+import { getUsers } from "../services/userService";
+
+function UserList() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  async function loadUsers() {
+    try {
+      const data = await getUsers();
+      setUsers(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return (
+    <div>
+      <h2>Users</h2>
+
+      {users.map((user) => (
+        <p key={user.id}>{user.name}</p>
+      ))}
+    </div>
+  );
+}
+
+export default UserList;
+
+Notice that with Fetch, getUsers() already returns the parsed JSON, so you use:
+
+const data = await getUsers();
+
+instead of:
+
+const response = await axios.get(...);
+setUsers(response.data);
+Step 4: POST Example
+import { createUser } from "../services/userService";
+
+const addUser = async () => {
+  try {
+    const data = await createUser({
+      name: "John",
+      email: "john@gmail.com",
+    });
+
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+Step 5: PUT Example
+import { updateUser } from "../services/userService";
+
+const editUser = async () => {
+  try {
+    const data = await updateUser(1, {
+      name: "Updated Name",
+      email: "updated@gmail.com",
+    });
+
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+Step 6: PATCH Example
+import { patchUser } from "../services/userService";
+
+const updateName = async () => {
+  try {
+    const data = await patchUser(1, {
+      name: "Only Name Updated",
+    });
+
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+Step 7: DELETE Example
+import { deleteUser } from "../services/userService";
+
+const removeUser = async () => {
+  try {
+    await deleteUser(1);
+    console.log("User Deleted");
+  } catch (error) {
+    console.log(error);
+  }
+};
+API Flow
+React Component
+       │
+       ▼
+userService.js
+       │
+       ▼
+api.js (Fetch Wrapper)
+       │
+       ▼
+Server
+       │
+       ▼
+Response
+       │
+       ▼
+Component
+
+Axios vs Fetch (Same Project Structure)
+Axios
+api.js
+const api = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+});
+userService.js
+export const getUsers = () => api.get("/users");
+Component
+const response = await getUsers();
+setUsers(response.data);
+Fetch
+api.js
+export const apiRequest = (endpoint, options) => {
+  return fetch(...);
+};
+userService.js
+export const getUsers = () => apiRequest("/users");
+Component
+const data = await getUsers();
+setUsers(data);
+Which approach is used in real projects?
+
+For both Fetch and Axios, professional React projects usually follow the same layered structure:
+
+React Component
+        │
+        ▼
+Service Layer (userService.js)
+        │
+        ▼
+API Layer (api.js)
+        │
+        ▼
+Backend API
+
+The only difference is the implementation inside api.js:
+
+Axios uses axios.create() and returns response.data.
+Fetch uses fetch(), checks response.ok, and returns response.json().
+
+This separation keeps your components focused on rendering UI while all networking logic stays in the services folder.
