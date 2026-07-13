@@ -1,0 +1,41 @@
+install json server
+outside src folder create db.json file
+write inside data
+in package.json write {
+  "scripts": {
+    "dev": "vite",
+    "server": "json-server --watch db.json --port 3001"
+  }
+}
+in terminal write command npm run server
+
+Folder Structure
+my-app/
+│
+├── src/
+│   ├── components/
+│   ├── services/
+│   │      api.js
+│   │      userService.js
+│   ├── App.jsx
+│
+├── db.json
+├── package.json
+
+Interview Questions
+1. What is json-server?
+
+A tool that creates a fake REST API from a JSON file. It is mainly used for frontend development and testing when the backend is not ready.
+
+2. Why do we use json-server?
+Develop frontend independently.
+Test CRUD operations.
+Prototype APIs quickly.
+Practice Fetch/Axios without building a backend.
+3. Does json-server store data permanently?
+
+Yes. When you perform POST, PUT, PATCH, or DELETE, it updates the db.json file automatically.
+
+4. Is json-server used in production?
+
+No. It is meant for development and learning. In production, your React app communicates with a real backend (Node.js, Express, Django, Spring Boot, etc.).
