@@ -1,0 +1,548 @@
+1. What is an API?
+Answer
+
+API stands for Application Programming Interface.
+
+It is a way for two applications to communicate with each other.
+
+For example:
+
+React (Frontend) sends a request.
+Node.js (Backend) processes it.
+Backend sends a response.
+
+Real-life Example:
+
+You order food from Zomato.
+You don't go to the restaurant yourself.
+Zomato acts as the medium between you and the restaurant.
+
+Similarly, an API acts as the medium between the frontend and the backend.
+
+2. What is HTTP?
+Answer
+
+HTTP stands for HyperText Transfer Protocol.
+
+It is the protocol used for communication between a client and a server over the internet.
+
+Example:
+
+React ----HTTP Request----> Server
+
+React <---HTTP Response---- Server
+3. What is REST API?
+Answer
+
+REST stands for Representational State Transfer.
+
+A REST API follows standard HTTP methods like:
+
+GET
+POST
+PUT
+PATCH
+DELETE
+
+Example:
+
+GET /users
+POST /users
+PUT /users/1
+DELETE /users/1
+4. What is Fetch API?
+Answer
+
+Fetch API is a built-in JavaScript API used to make HTTP requests.
+
+It does not require any installation.
+
+Example:
+
+const response = await fetch("/users");
+const data = await response.json();
+5. Is Fetch API a React API?
+Answer
+
+No.
+
+Fetch API is a JavaScript API, not a React API.
+
+It works in:
+
+React
+JavaScript
+Angular
+Vue
+Any browser that supports Fetch
+6. What is Axios?
+Answer
+
+Axios is a popular JavaScript library used to make HTTP requests.
+
+Unlike Fetch, it needs to be installed.
+
+npm install axios
+
+Example:
+
+const response = await axios.get("/users");
+7. Difference between Fetch and Axios?
+Fetch	Axios
+Built into JavaScript	External library
+No installation needed	Requires installation
+Need response.json()	Returns parsed JSON automatically
+Doesn't throw for 404/500	Throws errors for HTTP error responses
+More code	Cleaner syntax
+8. Why do we use APIs?
+Answer
+
+APIs are used to exchange data between the frontend and the backend.
+
+Examples:
+
+Login
+Registration
+Fetch products
+Fetch users
+Upload files
+Make payments
+
+Without APIs, the frontend cannot communicate with the server.
+
+9. What is JSON?
+Answer
+
+JSON stands for JavaScript Object Notation.
+
+It is a lightweight format used to send and receive data.
+
+Example:
+
+{
+  "name": "John",
+  "age": 25
+}
+
+Most APIs send and receive data in JSON format.
+
+10. What is JSON.stringify()?
+Answer
+
+JSON.stringify() converts a JavaScript object into a JSON string.
+
+Example:
+
+const user = {
+  name: "John",
+  age: 25,
+};
+
+console.log(JSON.stringify(user));
+
+Output:
+
+'{"name":"John","age":25}'
+
+We commonly use it with the Fetch API when sending data:
+
+body: JSON.stringify(user)
+11. What is JSON.parse()?
+Answer
+
+JSON.parse() converts a JSON string into a JavaScript object.
+
+Example:
+
+const str = '{"name":"John"}';
+
+const user = JSON.parse(str);
+
+console.log(user.name);
+
+Output:
+
+John
+12. What are HTTP Methods?
+Answer
+
+HTTP methods tell the server what action to perform.
+
+Method	Purpose
+GET	Fetch data
+POST	Create new data
+PUT	Replace existing data
+PATCH	Update specific fields
+DELETE	Delete data
+
+Example:
+
+GET /users
+
+POST /users
+
+PUT /users/1
+
+PATCH /users/1
+
+DELETE /users/1
+13. What is CRUD?
+Answer
+
+CRUD represents the four basic operations performed on data.
+
+CRUD	HTTP Method
+Create	POST
+Read	GET
+Update	PUT/PATCH
+Delete	DELETE
+
+Example:
+
+Create User
+
+↓
+
+POST
+
+/users
+14. Which method is the default in Fetch?
+Answer
+
+The default method is GET.
+
+Example:
+
+fetch("/users");
+
+is equivalent to:
+
+fetch("/users", {
+  method: "GET",
+});
+15. Which method is the default in Axios?
+Answer
+
+When using:
+
+axios.get("/users");
+
+the HTTP method is explicitly GET.
+
+If you use the generic Axios syntax without specifying a method:
+
+axios({
+  url: "/users",
+});
+
+Axios defaults to GET.
+
+Interview Tip
+
+A common interview follow-up is:
+
+Q: Which one do you prefer, Fetch or Axios?
+
+A good answer is:
+
+"Both are good. Fetch is built into JavaScript and works well for simple requests. Axios provides additional features like automatic JSON parsing, request/response interceptors, request cancellation, and better error handling, which is why it's commonly used in medium and large React applications."
+
+16. What is the syntax of a Fetch GET request?
+Answer
+
+A GET request is used to retrieve data from the server.
+
+Syntax
+const getUsers = async () => {
+  try {
+    const response = await fetch("http://localhost:3001/users");
+
+    const data = await response.json();
+
+    console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+Explanation
+fetch()
+
+↓
+
+Returns Response Object
+
+↓
+
+response.json()
+
+↓
+
+Converts JSON into JavaScript Object
+
+↓
+
+Use Data
+17. What is the syntax of a Fetch POST request?
+Answer
+
+POST is used to create new data on the server.
+
+Syntax
+const addUser = async () => {
+  try {
+    const response = await fetch("http://localhost:3001/users", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        name: "Vibha",
+        email: "vibha@gmail.com",
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+Why use JSON.stringify()?
+
+fetch expects the request body to be a string, so we convert the JavaScript object into a JSON string.
+
+18. Why do we write response.json()?
+Answer
+
+fetch() returns a Response object, not the actual data.
+
+The response body is received as a stream. Calling response.json() reads the body and converts the JSON into a JavaScript object.
+
+Example:
+
+const response = await fetch("/users");
+
+console.log(response);
+
+Output:
+
+Response { ... }
+
+To get the actual data:
+
+const data = await response.json();
+
+console.log(data);
+
+Output:
+
+[
+  {
+    id: 1,
+    name: "John",
+  },
+];
+19. What does fetch() return?
+Answer
+
+fetch() returns a Promise.
+
+After awaiting it, you get a Response object.
+
+const response = await fetch("/users");
+
+Here,
+
+response
+
+is a Response object, not the user data.
+
+20. What is a Response object?
+Answer
+
+A Response object contains information about the HTTP response.
+
+Example:
+
+const response = await fetch("/users");
+
+console.log(response);
+
+It includes properties such as:
+
+response.status
+response.ok
+response.headers
+response.url
+response.json()
+
+To access the actual data:
+
+const data = await response.json();
+21. What is response.ok?
+Answer
+
+response.ok is a boolean that indicates whether the request was successful.
+
+true → Status code is between 200 and 299
+false → Any other status code (404, 500, etc.)
+
+Example:
+
+const response = await fetch("/users");
+
+if (response.ok) {
+  console.log("Success");
+} else {
+  console.log("Failed");
+}
+22. What is response.status?
+Answer
+
+response.status returns the HTTP status code sent by the server.
+
+Example:
+
+const response = await fetch("/users");
+
+console.log(response.status);
+
+Possible outputs:
+
+200
+201
+400
+401
+404
+500
+23. Why is async/await preferred over .then()?
+Answer
+
+Both work, but async/await is generally easier to read and maintain.
+
+Using .then():
+
+fetch("/users")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err));
+
+Using async/await:
+
+try {
+  const response = await fetch("/users");
+
+  const data = await response.json();
+
+  console.log(data);
+} catch (err) {
+  console.log(err);
+}
+
+Interview Answer:
+
+async/await makes asynchronous code look like synchronous code, improving readability and simplifying error handling with try...catch.
+
+24. How do you handle errors in Fetch?
+Answer
+
+Use try...catch for network errors and check response.ok for HTTP errors.
+
+Example:
+
+try {
+  const response = await fetch("/users");
+
+  if (!response.ok) {
+    throw new Error("API Error");
+  }
+
+  const data = await response.json();
+
+  console.log(data);
+} catch (err) {
+  console.log(err.message);
+}
+25. What happens if the response status is 404?
+Answer
+
+The server returns 404 Not Found.
+
+With Fetch:
+
+const response = await fetch("/users");
+
+catch does not run automatically for a 404 response.
+
+Instead:
+
+console.log(response.status);
+
+prints:
+
+404
+
+and
+
+console.log(response.ok);
+
+prints:
+
+false
+
+To treat it as an error:
+
+if (!response.ok) {
+  throw new Error("User Not Found");
+}
+26. Does Fetch throw an error on 404?
+Answer
+
+No.
+
+This is one of the most common interview questions.
+
+Fetch only rejects the Promise for network-level failures, such as:
+
+No internet connection
+Server is unreachable
+DNS lookup failure
+
+A 404, 401, or 500 response is still considered a successful HTTP response from the network perspective, so Fetch resolves the Promise.
+
+Example:
+
+const response = await fetch("/wrong-url");
+
+console.log(response.status);
+
+Output:
+
+404
+
+No exception is thrown unless you throw one yourself:
+
+if (!response.ok) {
+  throw new Error("Request Failed");
+}
+
+Then catch will execute.
+
+| Question | Key Point                                                                       |
+| -------- | ------------------------------------------------------------------------------- |
+| 16       | GET uses `fetch(url)`                                                           |
+| 17       | POST uses `method`, `headers`, and `body`                                       |
+| 18       | `response.json()` converts JSON to a JavaScript object                          |
+| 19       | `fetch()` returns a Promise that resolves to a `Response` object                |
+| 20       | `Response` contains `status`, `ok`, `headers`, `json()`, etc.                   |
+| 21       | `response.ok` is `true` for status codes **200–299**                            |
+| 22       | `response.status` returns the HTTP status code                                  |
+| 23       | `async/await` is preferred for readability and cleaner error handling           |
+| 24       | Use `try...catch` for network errors and `response.ok` for HTTP errors          |
+| 25       | A **404** sets `response.ok` to `false` but does not automatically throw        |
+| 26       | Fetch does **not** throw for **404/500**; you must check `response.ok` yourself |
+
+

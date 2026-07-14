@@ -258,3 +258,17 @@ Axios Interceptors क्या होते हैं?
 axios.create() क्यों use करते हैं?
 JWT token हर request में automatically कैसे भेजोगे?
 401 Unauthorized आने पर user को login page पर कैसे redirect करोगे?
+
+Summary
+Situation	Goes to catch?
+Wrong API URL (404)	✅ Yes (Axios)
+Server not running	✅ Yes
+Network error	✅ Yes
+500 Internal Server Error	✅ Yes
+throw new Error()	✅ Yes
+undefined.name	✅ Yes
+undefined.map()	✅ Yes
+ele.nam (wrong property name)	❌ No (undefined)
+response.data.xyz	❌ No (undefined)
+Empty array	❌ No
+

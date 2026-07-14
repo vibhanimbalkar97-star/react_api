@@ -1,8 +1,19 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "John"
+    },
+    {
+      "fullName": "abc",
+      "email": "abc@gmail.com",
+      "id": "GIt3HgzQUlY"
+    },
+    {
+      "fullName": "abc",
+      "email": "abc@gmail.com",
+      "id": "3Hr9hW5_V0w"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
